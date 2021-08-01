@@ -46,6 +46,7 @@ namespace WhatsAppAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WhatsAppAPI", Version = "v1" });
             });
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IEventRepository, EventRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

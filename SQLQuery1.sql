@@ -1,0 +1,1 @@
+﻿select * from [User] where FirebaseId = 'paaNe0n3rQhOPUUTgtgRbg1xhro2'

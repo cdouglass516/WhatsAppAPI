@@ -30,9 +30,9 @@ namespace WhatsAppAPI.Controllers
             var userProfile = _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
             if (userProfile == null)
             {
-                return NotFound();
+                return Ok(-1);
             }
-            return Ok();
+            return Ok(userProfile);
         }
 
         //[HttpPost]

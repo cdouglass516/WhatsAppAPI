@@ -35,7 +35,8 @@ namespace WhatsAppAPI.Repositories
                             LastName = DbUtils.GetString(reader, "LastName"),
                             FirstName = DbUtils.GetString(reader, "FirstName"),
                             Email = DbUtils.GetString(reader, "Email"),
-                            RoleId = DbUtils.GetInt(reader, "RoleId")
+                            RoleId = DbUtils.GetInt(reader, "RoleId"),
+                            ImageLocation = DbUtils.GetString(reader, "ImageLocation")
                         };
                     }
                     reader.Close();
