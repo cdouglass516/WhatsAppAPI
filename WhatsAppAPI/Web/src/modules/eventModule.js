@@ -1,5 +1,5 @@
 import { getToken } from "./authManager";
-const baseUrl = "http://localhost:8088/";
+const baseUrl = "";
 export const getAllEvents = (id) => {
   let url = "/getEvents/";
   if (id) url += id;
@@ -35,6 +35,27 @@ export const getEventById = (baseUrl) => {
         throw new Error(
           "An unknown error occurred while trying to get quotes."
         );
+      }
+    });
+  });
+};
+
+export const saveFormData = (event) => {
+  return getToken().then((token) => {
+    return fetch('/AddEvent', {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(event)
+    }).then(resp => {
+      if (resp.ok) {
+        return resp.json();
+      } else if (resp.status === 401) {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("An unknown error occurred while trying to save a new quote.");
       }
     });
   });

@@ -3,7 +3,7 @@ import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { useHistory, Link } from "react-router-dom";
 import { login } from "../../modules/authManager";
 
-export default function Login({ setIsAdmin }) {
+export default function Login({ setIsAdmin, }) {
   const history = useHistory();
 
   const [email, setEmail] = useState();

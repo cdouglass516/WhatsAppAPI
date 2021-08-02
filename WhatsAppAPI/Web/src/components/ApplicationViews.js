@@ -10,8 +10,9 @@ import EventForm from "../components/admin/EventForm";
 export default function ApplicationViews({
   isLoggedIn,
   setIsLoggedIn,
-  setOnAdmin,
+  setOnAdmin
 }) {
+  
   return (
     <main>
       <Switch>
@@ -28,7 +29,7 @@ export default function ApplicationViews({
         </Route>
         <Route path="/eventform" exact>
           {isLoggedIn ? (
-            <EventForm isLoggedIn={isLoggedIn} setOnAdmin={setOnAdmin} />
+            <EventForm isLoggedIn={isLoggedIn} setOnAdmin={setOnAdmin}/>
           ) : (
             <Redirect to="/login" />
           )}

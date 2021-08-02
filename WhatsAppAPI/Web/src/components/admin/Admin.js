@@ -3,14 +3,17 @@ import { useHistory } from "react-router";
 import AdminNav from "./AdminNav";
 import { getFBUserID, getUserRole } from "../../modules/authManager";
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom/cjs/react-dom.development";
+import firebase from "firebase/app";
+import "firebase/auth";
 
-function Admin({ isLoggedIn, setOnAdmin }) {
+function Admin({setOnAdmin,isLoggedIn }) {
   const [userProfile, setUserProfile] = useState({
     fullName: "",
     roleId: 0,
     email: "",
     imageLocation: "",
   });
+  let userId = ""
   const [isAdmin, setIsAdmin] = useState(false);
   const getRole = () => {
     getUserRole(getFBUserID()).then((user) => {
@@ -22,6 +25,7 @@ function Admin({ isLoggedIn, setOnAdmin }) {
         email: user.email,
         imageLocation: user.imageLocation,
       });
+      userId = firebase.auth().currentUser.uid;
       if (userProfile.roleId === 9) {
         setIsAdmin(true);
       }
@@ -34,7 +38,7 @@ function Admin({ isLoggedIn, setOnAdmin }) {
   return (
     <>
       <div style={admin}>
-        <div>welcome {userProfile.fullName}</div>
+        <div>welcome {userProfile.fullName} </div>
         <AdminNav isAdmin={isAdmin} />
       </div>
       <div></div>
