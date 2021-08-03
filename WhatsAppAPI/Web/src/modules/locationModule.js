@@ -1,41 +1,19 @@
 import { getToken } from "./authManager";
-const baseUrl = "http://localhost:8088/";
-export const getAllEvents = (baseUrl) => {
-  return getToken().then((token) => {
-    return fetch(baseUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((resp) => {
-      if (resp.ok) {
-        return resp.json();
-      } else {
-        throw new Error(
-          "An unknown error occurred while trying to get quotes."
-        );
-      }
-    });
-  });
+const baseUrl = "/api/Location";
+let fetchUrl = "";
+export const getLocName = (id) => {
+  fetchUrl = baseUrl + `/${id}`;
+  return fetch(fetchUrl, {
+    method: "GET",
+    headers: {},
+  }).then((resp) => resp.json());
 };
-
-export const getEventById = (baseUrl) => {
-  return getToken().then((token) => {
-    return fetch(baseUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((resp) => {
-      if (resp.ok) {
-        return resp.json();
-      } else {
-        throw new Error(
-          "An unknown error occurred while trying to get quotes."
-        );
-      }
-    });
-  });
+export const getAll = () => {
+  fetchUrl = baseUrl;
+  return fetch(fetchUrl, {
+    method: "GET",
+    headers: {},
+  }).then((resp) => resp.json());
 };
 
 export const DeleteEvent = (comment) => {
