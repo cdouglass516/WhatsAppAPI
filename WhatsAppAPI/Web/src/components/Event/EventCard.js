@@ -1,18 +1,22 @@
-import React from "react";
+import ImgComonent from "../elements/ImgComonent";
+import LinkComponent from "../elements/LinkComponent";
+import DateComponent from "../elements/DateComponent";
+import Location from "../location/Location";
 
-function EventCard(props) {
+function EventCard({ ev }) {
+  const openDetail = (id) => {};
   return (
     <>
-      <div style={eventContainer}>
-        <img
-          src="https://i.ibb.co/wKzfpjF/music.jpg"
-          alt="music"
-          border="0"
-          style={eventImage}
-        />
+      <div style={eventContainer} onClick={() => openDetail(ev.id)}>
+        <ImgComonent url={ev.eventImageURL} sty={eventImage} />
         <div style={eventText}>
-          <h6>Event Header</h6>
-          <span>This is a sale on whiskey sours</span>
+          <h6>
+            <LinkComponent url={ev.eventURL} name={ev.name} />
+          </h6>
+          <span>{ev.description}</span>
+          <DateComponent type={"Start Date"} date={ev.startDate} />
+          <DateComponent type={"End Date"} date={ev.endDate} />
+          <Location locationId={ev.locationId} />
         </div>
       </div>
     </>

@@ -1,17 +1,19 @@
 import React from "react";
 import EventCard from "./EventCard";
-
-function ExentList({ id }) {
-  React.useEffect(() => {}, []);
+import { getAllEvents } from "../../modules/eventModule";
+function ExentList() {
+  const [events, setEvents] = React.useState([]);
+  const getEvents = () => {
+    getAllEvents().then((evs) => setEvents(evs));
+  };
+  React.useEffect(() => {
+    getEvents();
+  }, [events]);
   return (
     <div style={eventList}>
-      <EventCard />
-      <EventCard />
-      <EventCard />
-      <EventCard />
-      <EventCard />
-      <EventCard />
-      <EventCard />
+      {events.map((ev) => (
+        <EventCard key={ev.id} ev={ev} />
+      ))}
     </div>
   );
 }

@@ -1,35 +1,15 @@
 import React from "react";
-import { Cloudinary } from "cloudinary-core";
 import MyButton from "../elements/MyButton";
-import firebase from "firebase/app";
-import "firebase/auth";
-import { saveFormData } from "../../modules/eventModule";
-import { getAll } from "../../modules/locationModule";
-import { getEventTypes } from "../../modules/eventModule";
 
-function EventForm({ setOnAdmin, curUserId }) {
-  const [eventReady, setEventReady] = React.useState(false);
-  const [locations, setLocations] = React.useState([]);
-  const [eventTypes, setEventTypes] = React.useState([]);
-  const getLocations = () => {
-    getAll().then((locs) => setLocations(locs));
-  };
-
-  const getETs = () => {
-    getEventTypes().then((ets) => setEventTypes(ets));
-  };
-  React.useEffect(() => {
-    getETs();
-  }, [eventTypes]);
-
-  React.useEffect(() => {
-    getLocations();
-  }, [locations]);
-
+function AddLocation(props) {
+  const [locReady, setLocReady] = React.useState(false);
   React.useEffect(() => {
     setOnAdmin(false);
   }, []);
 
+  React.useEffect(() => {
+    setOnAdmin(false);
+  }, []);
   const [values, setValues] = React.useState({
     Name: "",
     Description: "",
@@ -91,7 +71,7 @@ function EventForm({ setOnAdmin, curUserId }) {
       {!eventReady && (
         <div>
           <form style={container} onSubmit={onSubmit}>
-            <h4>Enter Event {eventReady}</h4>
+            <h4>Enter Event {eventReady} ok</h4>
 
             <label>Event Label:</label>
             <input value={values.Name} onChange={set("Name")} />
@@ -116,7 +96,7 @@ function EventForm({ setOnAdmin, curUserId }) {
               onChange={set("EndDate")}
             />
 
-            <label>Event Website*:</label>
+            <label>Event Website:</label>
             <input value={values.EventURL} onChange={set("EventURL")} />
 
             <label>Image URL*:</label>
@@ -127,7 +107,7 @@ function EventForm({ setOnAdmin, curUserId }) {
               <option value="">Select location</option>
               {locations.map((c) => (
                 <option value={c.id} key={c.id}>
-                  {c.name}
+                  {c.location}
                 </option>
               ))}
             </select>
@@ -137,7 +117,7 @@ function EventForm({ setOnAdmin, curUserId }) {
               <option value="">Select event type</option>
               {eventTypes.map((e) => (
                 <option value={e.id} key={e.id}>
-                  {e.description}
+                  {e.type}
                 </option>
               ))}
             </select>
@@ -230,4 +210,5 @@ const container = {
   padding: ".5rem",
   borderRadius: "5px",
 };
-export default EventForm;
+
+export default AddLocation;
