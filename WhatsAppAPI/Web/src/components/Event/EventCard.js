@@ -2,21 +2,41 @@ import ImgComonent from "../elements/ImgComonent";
 import LinkComponent from "../elements/LinkComponent";
 import DateComponent from "../elements/DateComponent";
 import Location from "../location/Location";
-
+import LocationDiv from "../location/LocationDiv";
+import React from "react";
 function EventCard({ ev }) {
+  const [img, setImg] = React.useState("https://i.ibb.co/gdJ2LLZ/logo.png");
   const openDetail = (id) => {};
+  React.useEffect(() => {
+    var startDt = new Date(ev.startDate);
+    var endDt = new Date(ev.endDate);
+    startDt.setHours(startDt.getHours() - 1);
+    var today = new Date();
+    if (ev.eventImageURL) {
+      setImg(ev.eventImageURL);
+    }
+  }, [ev]);
   return (
     <>
       <div style={eventContainer} onClick={() => openDetail(ev.id)}>
-        <ImgComonent url={ev.eventImageURL} sty={eventImage} />
+        <div>
+          <p>{ev.eventType}</p>
+          <ImgComonent url={img} sty={eventImage} />
+        </div>
+
         <div style={eventText}>
           <h6>
-            <LinkComponent url={ev.eventURL} name={ev.name} />
+            {ev.eventURL && <LinkComponent url={ev.eventURL} name={ev.name} />}
+            {!ev.eventURL && ev.name}
           </h6>
           <span>{ev.description}</span>
           <DateComponent type={"Start Date"} date={ev.startDate} />
           <DateComponent type={"End Date"} date={ev.endDate} />
-          <Location locationId={ev.locationId} />
+          <LocationDiv
+            loc={ev.location}
+            url={ev.locationUrl}
+            latlon={ev.latLon}
+          />
         </div>
       </div>
     </>

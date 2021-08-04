@@ -31,7 +31,7 @@ export const getEventTypes = () => {
   });
 };
 
-export const getEventByEventId = (userId) => {
+export const getEventByUserId = (userId) => {
   fetchUrl = baseUrl + "/GetEvents/" + userId;
   return getToken().then((token) => {
     return fetch(fetchUrl, {
@@ -44,7 +44,7 @@ export const getEventByEventId = (userId) => {
         return resp.json();
       } else {
         throw new Error(
-          "An unknown error occurred while trying to get quotes."
+          "An unknown error occurred while trying to get events."
         );
       }
     });
@@ -61,10 +61,12 @@ export const getEventById = (id) => {
       },
     }).then((resp) => {
       if (resp.ok) {
-        return resp.json();
+        const ret = resp.json();
+        console.log(ret);
+        return ret;
       } else {
         throw new Error(
-          "An unknown error occurred while trying to get quotes."
+          "An unknown error occurred while trying to get events."
         );
       }
     });
@@ -87,21 +89,56 @@ export const saveFormData = (ev) => {
         throw new Error("Unauthorized");
       } else {
         throw new Error(
-          "An unknown error occurred while trying to save a new quote."
+          "An unknown error occurred while trying to save an event."
+        );
+      }
+    });
+  });
+};
+export const editFormData = (ev) => {
+  return getToken().then((token) => {
+    return fetch(baseUrl + `/${ev.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ev),
+    }).then((resp) => {
+      if (resp.ok) {
+        return resp.json();
+      } else if (resp.status === 401) {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error(
+          "An unknown error occurred while trying to edit event."
         );
       }
     });
   });
 };
 
-export const DeleteEvent = (comment) => {
-  return fetch(`${baseUrl}comments/${comment.id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(comment),
-  }).then((data) => data.json());
+export const cancelEvent = (id) => {
+  return getToken().then((token) => {
+    return fetch(`${baseUrl}/cancel/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((data) => data.json());
+  });
+};
+
+export const deleteEvent = (id) => {
+  return getToken().then((token) => {
+    return fetch(`${baseUrl}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(id),
+    });
+  });
 };
 
 export const EditEvent = (comment) => {

@@ -1,9 +1,23 @@
 import React, { useEffect } from "react";
-
-function Add({ setOnAdmin }) {
+import { getAdById } from "../../modules/adModule";
+function Add({ setOnAdmin, addItem, setAddItem }) {
+  const [ads, setAds] = React.useState({});
+  React.useEffect(() => {
+    getAdItems(addItem);
+    setTimeout(myFunction, 5000);
+  }, []);
   React.useEffect(() => {
     setOnAdmin(false);
-  }, []);
+  }, [addItem]);
+
+  const getAdItems = (id) => {
+    getAdById(id).then((ad) => setAds(ad));
+  };
+  const myFunction = () => {
+    console.log("Timer Expired");
+    setAddItem(addItem + 1);
+    setTimeout(myFunction, 5000);
+  };
   return (
     <>
       <div style={addContainer}>

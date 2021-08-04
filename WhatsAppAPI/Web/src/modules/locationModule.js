@@ -26,24 +26,35 @@ export const DeleteEvent = (comment) => {
   }).then((data) => data.json());
 };
 
-export const EditEvent = (comment) => {
-  return fetch(`${baseUrl}comments/${comment.id}`, {
+export const EditLoc = (id, values) => {
+  return fetch(`${baseUrl}/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(comment),
+    body: JSON.stringify(values),
   }).then((data) => data.json());
 };
 
-export const addEvent = (video, baseUrl) => {
+export const saveFormData = (location) => {
   return getToken().then((token) => {
     return fetch(baseUrl, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(video),
+      body: JSON.stringify(location),
+    }).then((resp) => {
+      if (resp.ok) {
+        return resp.json();
+      } else if (resp.status === 401) {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error(
+          "An unknown error occurred while trying to save a new location."
+        );
+      }
     });
   });
 };

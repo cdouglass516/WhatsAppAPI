@@ -6,27 +6,29 @@ import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from "react-dom/cj
 import firebase from "firebase/app";
 import "firebase/auth";
 
-function Admin({setOnAdmin,isLoggedIn }) {
+function Admin({ setOnAdmin, isLoggedIn }) {
   const [userProfile, setUserProfile] = useState({
+    id: 0,
     fullName: "",
     roleId: 0,
     email: "",
     imageLocation: "",
   });
-  let userId = ""
+  let userId = "";
   const [isAdmin, setIsAdmin] = useState(false);
   const getRole = () => {
     getUserRole(getFBUserID()).then((user) => {
-      setOnAdmin(true);
       setUserProfile({
         ...userProfile,
+        id: user.id,
         fullName: user.fullName,
         roleId: user.roleId,
         email: user.email,
         imageLocation: user.imageLocation,
       });
-      userId = firebase.auth().currentUser.uid;
-      if (userProfile.roleId === 9) {
+      setOnAdmin(true);
+      userId = user.id;
+      if (user.roleId === 9) {
         setIsAdmin(true);
       }
     });

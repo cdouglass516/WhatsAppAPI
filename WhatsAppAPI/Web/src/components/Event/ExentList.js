@@ -6,9 +6,10 @@ function ExentList() {
   const getEvents = () => {
     getAllEvents().then((evs) => setEvents(evs));
   };
+
   React.useEffect(() => {
     getEvents();
-  }, [events]);
+  }, []);
   return (
     <div style={eventList}>
       {events.map((ev) => (
@@ -20,7 +21,7 @@ function ExentList() {
 const eventList = {
   maxWidth: "35.5rem",
   margin: "5px auto",
-  overflow: "scroll",
+  overflow: "auto",
   minHeight: "300px",
   border: "1px dashed steelblue",
   padding: "5px",

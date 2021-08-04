@@ -21,7 +21,7 @@ function DateComponent({ type, date }) {
   return (
     <div>
       <span>
-        <strong>{type}: </strong>
+        <label>{type}: </label>
         {formatDate(date)}
       </span>
     </div>

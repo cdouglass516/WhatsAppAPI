@@ -1,8 +1,9 @@
 import React from "react";
+import { EditLoc, getLocName } from "../../modules/locationModule";
 import MyButton from "../elements/MyButton";
-import { saveFormData } from "../../modules/locationModule";
+import { useLocation } from "react-router-dom";
 
-function AddLocation(props) {
+function EditLocation({ id }) {
   const [locationReady, setLocationReady] = React.useState(false);
   const [values, setValues] = React.useState({
     name: "Name of Location",
@@ -16,10 +17,10 @@ function AddLocation(props) {
       setValues((oldValues) => ({ ...oldValues, [name]: value }));
     };
   };
-  const onAddEvent = async (event) => {
+  const onAddEvent = async () => {
     try {
-      saveFormData(values).then(() => {
-        alert("Your Location was successfully submitted!");
+      EditLoc(values.id, values).then(() => {
+        alert("Your Location was successfully updated!");
         setValues({
           name: "",
           description: "",
@@ -32,7 +33,7 @@ function AddLocation(props) {
       alert(`Add Location failed! ${e.message}`);
     }
   };
-
+  const location = useLocation();
   const onCancelAdd = async (event) => {
     try {
       setLocationReady(false);
@@ -48,6 +49,13 @@ function AddLocation(props) {
       alert(`Event Creation failed! ${e.message}`);
     }
   };
+  const getEditLocation = (id) => {
+    getLocName(id).then((loc) => setValues(loc));
+  };
+  React.useEffect(() => {
+    let locationId = location.pathname.substr(14, location.pathname.length);
+    getEditLocation(locationId);
+  }, []);
 
   return (
     <>
@@ -66,7 +74,7 @@ function AddLocation(props) {
             />
 
             <label>Location Website:</label>
-            <input value={values.eventURL} onChange={set("locationURL")} />
+            <input value={values.locationUrl} onChange={set("locationUrl")} />
 
             <label>Image URL*:</label>
             <input value={values.imageURL} onChange={set("imageURL")} />
@@ -115,7 +123,7 @@ function AddLocation(props) {
             }}
           >
             <MyButton
-              text={"Add Location"}
+              text={"Save Location"}
               onClick={onAddEvent}
               cn={buttonCSS}
             />
@@ -151,5 +159,4 @@ const container = {
   padding: ".5rem",
   borderRadius: "5px",
 };
-
-export default AddLocation;
+export default EditLocation;

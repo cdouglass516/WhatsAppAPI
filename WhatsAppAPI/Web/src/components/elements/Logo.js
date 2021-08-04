@@ -11,9 +11,10 @@ function Logo({ isLoggedIn, setIsLoggedIn, admin }) {
   const btnLOClick = () => {
     logout();
     setIsLoggedIn(false);
+    history.push("/");
   };
   const btnADClick = (e) => {
-    if (e.btnText === "Admin") {
+    if (e === "Admin") {
       history.push("/admin");
     } else {
       history.push("/");
@@ -41,9 +42,17 @@ function Logo({ isLoggedIn, setIsLoggedIn, admin }) {
       {isLoggedIn && (
         <MyButton
           id={"AdminButton"}
-          text={btnText}
+          text={"Admin"}
           cn={buttonLOCSS}
-          onClick={() => btnADClick({ btnText })}
+          onClick={() => btnADClick("Admin")}
+        />
+      )}
+      {isLoggedIn && (
+        <MyButton
+          id={"AdminButton"}
+          text={"List"}
+          cn={buttonLOCSS}
+          onClick={() => btnADClick("")}
         />
       )}
     </div>

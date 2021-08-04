@@ -3,16 +3,18 @@ import { Cloudinary } from "cloudinary-core";
 import MyButton from "../elements/MyButton";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { saveFormData } from "../../modules/eventModule";
-import { getFBUserID, getUserRole } from "../../modules/authManager";
+import { editFormData, getEventById } from "../../modules/eventModule";
 import { getAll } from "../../modules/locationModule";
 import { getEventTypes } from "../../modules/eventModule";
+import { useLocation } from "react-router-dom";
 
-function EventForm({ setOnAdmin, curUserId }) {
+function EventEdit({ setOnAdmin, curUserId }) {
   const [eventReady, setEventReady] = React.useState(false);
   const [locations, setLocations] = React.useState([]);
   const [eventTypes, setEventTypes] = React.useState([]);
-  const [curUser, setCurUser] = React.useState(0);
+  const [showButtons, setShowButtons] = React.useState(true);
+  const [values, setValues] = React.useState({});
+  const eventId = useLocation();
   const getLocations = () => {
     getAll().then((locs) => setLocations(locs));
   };
@@ -22,59 +24,55 @@ function EventForm({ setOnAdmin, curUserId }) {
   };
   React.useEffect(() => {
     getETs();
-  }, []);
+  }, [eventTypes]);
 
   React.useEffect(() => {
     getLocations();
-  }, []);
+  }, [locations]);
 
   React.useEffect(() => {
     setOnAdmin(false);
   }, []);
-  const getRole = () => {
-    getUserRole(getFBUserID()).then((user) => setCurUser(user.id));
-  };
 
-  React.useEffect(() => {
-    getRole();
-  }, []);
-  const [values, setValues] = React.useState({
-    Name: "",
-    Description: "",
-    EventURL: "",
-    EventImageURL: "",
-    LocationId: 0,
-    EventTypeId: 0,
-    EndDate: "",
-    StartDate: "",
-  });
   const set = (name) => {
     return ({ target: { value } }) => {
       setValues((oldValues) => ({ ...oldValues, [name]: value }));
     };
   };
-  const onAddEvent = async (event) => {
+  const getEditEvent = (id) => {
+    getEventById(id).then((ev) =>
+      setValues({
+        ...values,
+        id: ev.id,
+        name: ev.name,
+        description: ev.description,
+        endDate: ev.endDate,
+        eventImageURL: ev.eventImageURL,
+        locationId: ev.locationId,
+        eventTypeId: ev.eventTypeId,
+        eventURL: ev.eventURL,
+        startDate: ev.startDate,
+      })
+    );
+  };
+
+  React.useEffect(() => {
+    ///editEvent/4
+    let id = eventId.pathname.substr(11, eventId.pathname.length);
+    getEditEvent(id);
+  }, []);
+
+  const onSaveEvent = async (event) => {
     try {
-      values.FirebaseId = firebase.auth().currentUser.uid;
-      values.UserId = curUser;
-      values.Id = 0;
-      values.EndDate = values.EndDate;
-      values.StartDate = values.StartDate;
-      saveFormData(values).then(() => {
+      values.firebaseId = firebase.auth().currentUser.uid;
+      values.endDate = values.endDate;
+      values.startDate = values.startDate;
+      editFormData(values).then(() => {
         alert("Your event was successfully submitted!");
-        setValues({
-          Name: "",
-          Description: "",
-          EventURL: "",
-          EventImageURL: "",
-          LocationId: 0,
-          EventTypeId: 0,
-          EndDate: "",
-          StartDate: "",
-        });
+        setShowButtons(false);
       });
     } catch (e) {
-      alert(`Add Event failed! ${e.message}`);
+      alert(`Edit Event failed! ${e.message}`);
     }
   };
 
@@ -82,7 +80,7 @@ function EventForm({ setOnAdmin, curUserId }) {
     try {
       setEventReady(false);
     } catch (e) {
-      alert(`Event Creation failed! ${e.message}`);
+      alert(`Event Edit failed! ${e.message}`);
     }
   };
   const onSubmit = async (event) => {
@@ -99,39 +97,42 @@ function EventForm({ setOnAdmin, curUserId }) {
       {!eventReady && (
         <div>
           <form style={container} onSubmit={onSubmit}>
-            <h4>Enter Event {eventReady}</h4>
+            <h4>Edit Event {eventReady}</h4>
 
             <label>Event Label:</label>
-            <input value={values.Name} onChange={set("Name")} />
+            <input value={values.name} onChange={set("name")} />
 
             <label>Description:</label>
             <textarea
-              value={values.Description}
-              onChange={set("Description")}
+              value={values.description}
+              onChange={set("description")}
             />
 
             <label>Start Date and Time:</label>
             <input
               type="datetime-local"
-              value={values.StartDate}
-              onChange={set("StartDate")}
+              value={values.startDate}
+              onChange={set("startDate")}
             />
 
             <label>End Date and Time:</label>
             <input
               type="datetime-local"
-              value={values.EndDate}
-              onChange={set("EndDate")}
+              value={values.endDate}
+              onChange={set("endDate")}
             />
 
             <label>Event Website*:</label>
-            <input value={values.EventURL} onChange={set("EventURL")} />
+            <input value={values.eventURL} onChange={set("eventURL")} />
 
             <label>Image URL*:</label>
-            <input value={values.ImageURL} onChange={set("EventImageURL")} />
+            <input
+              value={values.eventImageURL}
+              onChange={set("eventImageURL")}
+            />
 
             <label>Location:</label>
-            <select value={values.LocationId} onChange={set("LocationId")}>
+            <select value={values.locationId} onChange={set("locationId")}>
               <option value="">Select location</option>
               {locations.map((c) => (
                 <option value={c.id} key={c.id}>
@@ -141,7 +142,7 @@ function EventForm({ setOnAdmin, curUserId }) {
             </select>
 
             <label>Event Type:</label>
-            <select value={values.EventTypeId} onChange={set("EventTypeId")}>
+            <select value={values.eventTypeId} onChange={set("eventTypeId")}>
               <option value="">Select event type</option>
               {eventTypes.map((e) => (
                 <option value={e.id} key={e.id}>
@@ -161,57 +162,59 @@ function EventForm({ setOnAdmin, curUserId }) {
 
       {eventReady && (
         <div style={container}>
-          <h4>New Event</h4>
+          <h4>Changed Event</h4>
           <label>
             <strong>Event:</strong>
           </label>{" "}
-          <label>{values.Name} </label>
+          <label>{values.name} </label>
           <label>
             <strong>Description:</strong>
           </label>{" "}
-          <label>{values.Description} </label>
+          <label>{values.description} </label>
           <label>
             <strong>Event Type:</strong>
           </label>{" "}
-          <label>{values.EventTypeId} </label>
+          <label>{values.eventTypeId} </label>
           <label>
             <strong>Start Date and Time:</strong>{" "}
           </label>
-          <label>{values.StartDate} </label>
+          <label>{values.startDate} </label>
           <label>
             <strong>End Date and Time:</strong>
           </label>{" "}
-          <label>{values.EndDate} </label>
+          <label>{values.endDate} </label>
           <label>
             <strong>Event URL:</strong>
           </label>{" "}
-          <label>{values.EventURL} </label>
+          <label>{values.eventURL} </label>
           <label>
             <strong>Image URL:</strong>
           </label>{" "}
-          <label>{values.EventImageURL} </label>
+          <label>{values.eventImageURL} </label>
           <label>
             <strong>Location:</strong>
           </label>{" "}
-          <label>{values.LocationId} </label>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              backgroundColor: "#e3f2fd",
-            }}
-          >
-            <MyButton
-              text={"Add the Event"}
-              onClick={onAddEvent}
-              cn={buttonCSS}
-            />
-            <MyButton
-              text={"Go Back to Edit"}
-              onClick={onCancelAdd}
-              cn={buttonCSS}
-            />
-          </div>
+          <label>{values.locationId} </label>
+          {showButtons && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                backgroundColor: "#e3f2fd",
+              }}
+            >
+              <MyButton
+                text={"Add the Event"}
+                onClick={onSaveEvent}
+                cn={buttonCSS}
+              />
+              <MyButton
+                text={"Go Back to Edit"}
+                onClick={onCancelAdd}
+                cn={buttonCSS}
+              />
+            </div>
+          )}
         </div>
       )}
     </>
@@ -238,4 +241,4 @@ const container = {
   padding: ".5rem",
   borderRadius: "5px",
 };
-export default EventForm;
+export default EventEdit;
