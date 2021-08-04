@@ -7,8 +7,10 @@ import { editFormData, getEventById } from "../../modules/eventModule";
 import { getAll } from "../../modules/locationModule";
 import { getEventTypes } from "../../modules/eventModule";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router";
 
 function EventEdit({ setOnAdmin, curUserId }) {
+  const history = useHistory();
   const [eventReady, setEventReady] = React.useState(false);
   const [locations, setLocations] = React.useState([]);
   const [eventTypes, setEventTypes] = React.useState([]);
@@ -69,6 +71,7 @@ function EventEdit({ setOnAdmin, curUserId }) {
       values.startDate = values.startDate;
       editFormData(values).then(() => {
         alert("Your event was successfully submitted!");
+        history.push(`/myevents`);
         setShowButtons(false);
       });
     } catch (e) {

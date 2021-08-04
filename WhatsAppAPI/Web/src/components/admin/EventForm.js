@@ -3,12 +3,16 @@ import { Cloudinary } from "cloudinary-core";
 import MyButton from "../elements/MyButton";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { saveFormData } from "../../modules/eventModule";
+import { useLocation } from "react-router-dom";
+import { saveFormData, getEventById } from "../../modules/eventModule";
 import { getFBUserID, getUserRole } from "../../modules/authManager";
 import { getAll } from "../../modules/locationModule";
 import { getEventTypes } from "../../modules/eventModule";
+import { useHistory } from "react-router";
 
 function EventForm({ setOnAdmin, curUserId }) {
+  const eventId = useLocation();
+  const history = useHistory();
   const [eventReady, setEventReady] = React.useState(false);
   const [locations, setLocations] = React.useState([]);
   const [eventTypes, setEventTypes] = React.useState([]);
@@ -33,6 +37,22 @@ function EventForm({ setOnAdmin, curUserId }) {
   }, []);
   const getRole = () => {
     getUserRole(getFBUserID()).then((user) => setCurUser(user.id));
+  };
+  const getEditEvent = (id) => {
+    getEventById(id).then((ev) =>
+      setValues({
+        ...values,
+        id: ev.id,
+        name: ev.name,
+        description: ev.description,
+        endDate: ev.endDate,
+        eventImageURL: ev.eventImageURL,
+        locationId: ev.locationId,
+        eventTypeId: ev.eventTypeId,
+        eventURL: ev.eventURL,
+        startDate: ev.startDate,
+      })
+    );
   };
 
   React.useEffect(() => {
@@ -62,6 +82,7 @@ function EventForm({ setOnAdmin, curUserId }) {
       values.StartDate = values.StartDate;
       saveFormData(values).then(() => {
         alert("Your event was successfully submitted!");
+        history.push(`/myevents`);
         setValues({
           Name: "",
           Description: "",

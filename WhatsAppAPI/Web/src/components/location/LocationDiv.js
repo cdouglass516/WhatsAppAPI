@@ -8,6 +8,7 @@ function LocationDiv({ loc, url, latlon }) {
       `https://www.google.com/maps/search/?api=1&query=${LatLong[0]},${LatLong[1]}`
     );
   }, []);
+
   return (
     <div>
       <div>

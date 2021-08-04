@@ -16,10 +16,10 @@ function MyEvents() {
     getEventByUserId(id).then((evs) => setEvents(evs));
   };
   const cancel = (id) => {
-    cancelEvent(id).then(() => getRole());
+    cancelEvent(id).then(() => history.push("/admin/"));
   };
   const deleteEv = (id) => {
-    deleteEvent(id).then(() => getRole());
+    deleteEvent(id).then(() => history.push("/admin/"));
   };
   const onBtnClick = () => {
     history.push("/eventform/");

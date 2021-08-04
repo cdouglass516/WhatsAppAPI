@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import ImgComonent from "../elements/ImgComonent";
 import DateComponent from "../elements/DateComponent";
 import MyButton from "../elements/MyButton";
@@ -9,6 +10,8 @@ function MyEventCard({ ev, cancel, deleteEv }) {
   const [isDelete, setIsDelete] = React.useState(true);
   const [isCancel, setIsCancel] = React.useState(true);
   const [eventColor, setEventColor] = React.useState("");
+  const [delButton, setDelButton] = React.useState("Delete");
+  const [canButton, setCanButton] = React.useState("Cancel");
   const openDetail = (id) => {};
   const onEdit = () => {
     history.push(`/editEvent/${ev.id}`);
@@ -29,6 +32,12 @@ function MyEventCard({ ev, cancel, deleteEv }) {
     if (!ev.eventImageURL)
       ev.eventImageURL = "https://i.ibb.co/gdJ2LLZ/logo.png";
     setEventColor("#99d6ff");
+    if (ev.name.substr(0, 2) === "CC") {
+      setCanButton("un-Cancel");
+    }
+    if (ev.inActive === true) {
+      setDelButton("un-Delete");
+    }
     if (startDt < today) {
       //Past date
       setIsEdit(false);
@@ -59,18 +68,10 @@ function MyEventCard({ ev, cancel, deleteEv }) {
               <MyButton text={"Edit Event"} onClick={onEdit} cn={buttonCSS} />
             )}
             {isCancel && (
-              <MyButton
-                text={"Cancel Event"}
-                onClick={onCancel}
-                cn={buttonCSS}
-              />
+              <MyButton text={canButton} onClick={onCancel} cn={buttonCSS} />
             )}
             {isDelete && (
-              <MyButton
-                text={"Delete Event"}
-                onClick={onDelete}
-                cn={buttonCSS}
-              />
+              <MyButton text={delButton} onClick={onDelete} cn={buttonCSS} />
             )}
           </div>
         </div>

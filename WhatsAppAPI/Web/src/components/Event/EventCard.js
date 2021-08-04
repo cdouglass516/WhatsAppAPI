@@ -1,7 +1,6 @@
 import ImgComonent from "../elements/ImgComonent";
 import LinkComponent from "../elements/LinkComponent";
 import DateComponent from "../elements/DateComponent";
-import Location from "../location/Location";
 import LocationDiv from "../location/LocationDiv";
 import React from "react";
 function EventCard({ ev }) {

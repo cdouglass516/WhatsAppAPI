@@ -16,7 +16,23 @@ export default function Register() {
     if (password && password !== confirmPassword) {
       alert("Passwords don't match. Do better.");
     } else {
-      const userProfile = { name, email };
+      let newName = name.split(" ");
+      let last = "";
+      if (newName.lenght > 1) {
+        last = newName[1];
+      }
+      const userProfile = {
+        id: 0,
+        userName: name,
+        firstName: newName[0],
+        lastName: last,
+        roleId: 1,
+        email: email,
+        imageLocation: "",
+        createDateTime: "2021-08-04T16:39:12.370Z",
+        inActive: false,
+      };
+
       register(userProfile, password).then(() => history.push("/"));
     }
   };

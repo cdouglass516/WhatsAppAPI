@@ -1,5 +1,5 @@
 import { getToken } from "./authManager";
-const baseUrl = "";
+const baseUrl = "/api/User";
 let fetchUrl = "";
 export const editFormData = (user, id) => {
   return getToken().then((token) => {

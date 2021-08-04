@@ -1,7 +1,7 @@
 ﻿import firebase from "firebase/app";
 import "firebase/auth";
 
-const _apiUrl = "";
+const _apiUrl = "/api/User";
 
 const _doesUserExist = (firebaseUserId) => {
   return getToken().then((token) =>
@@ -27,7 +27,7 @@ export const getUserRole = (firebaseUserId) => {
 
 const _saveUser = (userProfile) => {
   return getToken().then((token) =>
-    fetch(_apiUrl, {
+    fetch(_apiUrl + "/add", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const register = (userProfile, password) => {
     .then((createResponse) =>
       _saveUser({
         ...userProfile,
-        firebaseUserId: createResponse.user.uid,
+        firebaseId: createResponse.user.uid,
       })
     );
 };

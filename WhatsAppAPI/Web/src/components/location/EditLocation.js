@@ -2,15 +2,18 @@ import React from "react";
 import { EditLoc, getLocName } from "../../modules/locationModule";
 import MyButton from "../elements/MyButton";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router";
 
 function EditLocation({ id }) {
+  const history = useHistory();
+
   const [locationReady, setLocationReady] = React.useState(false);
   const [values, setValues] = React.useState({
     name: "Name of Location",
     description: "",
     locationURL: "",
     imageURL: "",
-    latLon: null,
+    latLon: "POINT (36.3035653 -86.7037743)",
   });
   const set = (name) => {
     return ({ target: { value } }) => {
@@ -21,12 +24,13 @@ function EditLocation({ id }) {
     try {
       EditLoc(values.id, values).then(() => {
         alert("Your Location was successfully updated!");
+        history.push(`/locations`);
         setValues({
           name: "",
           description: "",
           locationURL: "",
           imageURL: "",
-          latLon: null,
+          latLon: "POINT (36.3035653 -86.7037743)",
         });
       });
     } catch (e) {
