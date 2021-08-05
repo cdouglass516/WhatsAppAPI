@@ -15,6 +15,20 @@ export const getAllEvents = () => {
   });
 };
 
+export const getAllEventsByDistance = (home) => {
+  fetchUrl = baseUrl + "/getdistanceevents/";
+  return fetch(fetchUrl, {
+    method: "GET",
+    headers: {},
+  }).then((resp) => {
+    if (resp.ok) {
+      return resp.json();
+    } else {
+      throw new Error("An unknown error occurred while trying to get events.");
+    }
+  });
+};
+
 export const getEventTypes = () => {
   fetchUrl = baseUrl + "/GetEventTypes/";
   return fetch(fetchUrl, {

@@ -2,7 +2,7 @@ import React from "react";
 
 function MyButton({ cn, text, color, onClick, to }) {
   return (
-    <button style={cn} onClick={() => onClick({ to })} class="btnHover">
+    <button style={cn} onClick={() => onClick({ to })}>
       {text}
     </button>
   );

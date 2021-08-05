@@ -73,7 +73,7 @@ const buttonLOCSS = {
 };
 const buttonCSS = {
   backgroundColor: "lightblue",
-  width: "4rem;",
+  width: "4rem",
   height: "1.2rem",
   fontSize: ".6rem",
 };
