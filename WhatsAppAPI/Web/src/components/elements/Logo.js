@@ -27,50 +27,59 @@ function Logo({ isLoggedIn, setIsLoggedIn, admin }) {
   // }
   return (
     <div style={logoCSS}>
-      <img
-        src="https://i.ibb.co/gdJ2LLZ/logo.png"
-        alt="logo"
-        border="0"
-        style={logoContainerCSS}
-      />
-      {!isLoggedIn && (
-        <MyButton text="Login" cn={buttonCSS} onClick={btnClick} />
-      )}
-      {isLoggedIn && (
-        <MyButton text="Logout" cn={buttonLOCSS} onClick={btnLOClick} />
-      )}
-      {isLoggedIn && (
-        <MyButton
-          id={"AdminButton"}
-          text={"Admin"}
-          cn={buttonLOCSS}
-          onClick={() => btnADClick("Admin")}
+      <div>
+        {isLoggedIn && (
+          <MyButton
+            id={"AdminButton"}
+            text={"Home"}
+            cn={buttonLOCSS}
+            onClick={() => btnADClick("")}
+          />
+        )}
+      </div>
+      <div>
+        <img
+          src="https://i.ibb.co/gdJ2LLZ/logo.png"
+          alt="logo"
+          border="0"
+          style={logoContainerCSS}
         />
-      )}
-      {isLoggedIn && (
-        <MyButton
-          id={"AdminButton"}
-          text={"List"}
-          cn={buttonLOCSS}
-          onClick={() => btnADClick("")}
-        />
-      )}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        {isLoggedIn && (
+          <MyButton
+            id={"AdminButton"}
+            text={"Admin"}
+            cn={buttonLOCSS}
+            onClick={() => btnADClick("Admin")}
+          />
+        )}
+        {!isLoggedIn && (
+          <MyButton text="Login" cn={buttonCSS} onClick={btnClick} />
+        )}
+        {isLoggedIn && (
+          <MyButton text="Logout" cn={buttonLOCSS} onClick={btnLOClick} />
+        )}
+      </div>
     </div>
   );
 }
 const buttonLOCSS = {
   backgroundColor: "lightgrey",
+  minWidth: "12rem;",
+  marginRight: "5px",
   height: "1.2rem",
   fontSize: ".6rem",
 };
 const buttonCSS = {
   backgroundColor: "lightblue",
+  width: "4rem;",
   height: "1.2rem",
   fontSize: ".6rem",
 };
 const logoCSS = {
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "space-around",
   maxWidth: "35rem",
   margin: ".5rem auto",
   overflow: "auto",
@@ -79,7 +88,7 @@ const logoCSS = {
   borderRadius: "5px",
 };
 const logoContainerCSS = {
-  width: "180px",
+  width: "150px",
   height: "90px",
 };
 export default Logo;
